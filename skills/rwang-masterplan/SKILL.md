@@ -10,7 +10,7 @@ This skill runs RWANG:MasterPlan in the current working directory. The canonical
 ## Steps
 
 1. **Install RWANG into the project if missing** (makes it usable by any agent, not just Claude Code).
-   - For each of `RWANG-MASTERPLAN.md`, `RWANG-REVIEW.md`, `RWANG-OPTIMIZE.md`, `RWANG-VERSION.md`: if the project root lacks it, copy it from this skill's directory. Never overwrite an existing copy — the project's copy is authoritative.
+   - For each of `RWANG-MASTERPLAN.md`, `RWANG-CORE.md`, `RWANG-REVIEW.md`, `RWANG-OPTIMIZE.md`, `RWANG-VERSION.md`: if the project root lacks it, copy it from this skill's directory. Never overwrite an existing copy — the project's copy is authoritative.
    - If the project root has no `AGENTS.md`, copy `AGENTS.md` from this skill's directory (the RWANG command-dispatch table that Codex/Cursor/other agents auto-load).
    - If the project root has no `CLAUDE.md`, copy `CLAUDE.md` from this skill's directory.
    - Never create or overwrite `README.md` — it is reserved for the project's human-facing readme.

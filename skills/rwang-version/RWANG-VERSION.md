@@ -39,14 +39,16 @@ Original files keep their names, their content, and their format. RWANG:Version 
   "points_to": "docs/ARCHITECTURE.md",
   "type": "doc | code | config",
   "version": "1.2.0",
-  "status": "draft | frozen | deprecated",
+  "status": "draft | candidate | beta | stable | unstable | deprecated | superseded",
+  "superseded_by": null,
   "sha256": "<hash of the original file's content at last register/bump>",
   "relations": { "depends_on": ["DOC-0002"], "referenced_by": [] },
-  "created_at": "<ISO-8601>",
-  "updated_at": "<ISO-8601>",
+  "attributes": { "doc_type": "spec", "domain": "..." },
+  "created_at": "<ISO-8601 with local offset, e.g. +07:00>",
+  "updated_at": "<ISO-8601 with local offset>",
   "changelog": [
-    { "version": "1.2.0", "date": "<ISO-8601>", "kind": "minor", "change": "added event schema", "ref": "TASK-0012" },
-    { "version": "1.1.0", "date": "<ISO-8601>", "kind": "minor", "change": "initial freeze follow-up", "ref": "PHASE-2" }
+    { "version": "1.2.0", "date": "<ISO-8601+07:00>", "kind": "minor", "change": "added event schema", "ref": "TASK-0012", "agent": "<agent id>", "commit": "<git short hash or null>" },
+    { "version": "1.1.0", "date": "<ISO-8601+07:00>", "kind": "minor", "change": "initial freeze follow-up", "ref": "PHASE-2", "agent": "<agent id>", "commit": "<git short hash or null>" }
   ]
 }
 ```
@@ -61,10 +63,24 @@ Original files keep their names, their content, and their format. RWANG:Version 
 | Segment | Meaning | Rule |
 |---|---|---|
 | `0.y.z` | Draft | The owning phase is not yet approved |
-| `→ 1.0.0` | Frozen | Set automatically when the phase is approved; status becomes `frozen` |
-| **MAJOR** | Breaking / architectural change | On a `frozen` item this REQUIRES an approved `ARCHITECTURE_CHANGE_REQUEST.md` — cite it in the changelog `ref` or refuse the bump |
-| **MINOR** | Additive, backward-compatible content | Allowed with owner awareness |
-| **PATCH** | Typos, formatting, no change in meaning | Freely allowed |
+| `→ 1.0.0` | Approved | Set automatically when the phase is approved; status becomes `beta` |
+| **MAJOR (x)** | Breaking: structural change, rule/section removed or renamed, SOP restructured | On a `beta`/`stable` item this REQUIRES an approved `ARCHITECTURE_CHANGE_REQUEST.md` — cite it in the changelog `ref` or refuse the bump |
+| **MINOR (y)** | Additive: new rule/section, SOP step added, backward-compatible content | Allowed with owner awareness |
+| **PATCH (z)** | Clarification, typo, formatting, no change in meaning | Freely allowed |
+| `-beta` | Pre-release suffix (standard SemVer), e.g. `1.1.0-beta` | Optional for items published before their gate; spoken shorthand "1.1.0b" is accepted in conversation but stored as `-beta` |
+
+### Status lifecycle (one dimension, one direction)
+
+```
+draft → candidate → beta → stable
+                      ↘ unstable (known issues — must return to beta/stable or be rolled back)
+any → deprecated | superseded (terminal; superseded requires superseded_by)
+```
+
+- `draft` — being written, phase not approved. `candidate` — proposed for approval.
+- `beta` — approved, in soak/testing. `stable` — proven in use or promoted by the owner. **Both `beta` and `stable` count as "frozen" in MasterPlan terms** — the MAJOR/change-request rule applies to both.
+- **Rollbacks are events, not identities.** Never encode rollback into the version string (no `r`/`f` suffixes): record a changelog entry with `kind: "rollback"` or `"rollback-fix"` citing the version reverted to, bump PATCH, and set status `unstable` until re-verified.
+- Review pressure is not a lifecycle state: an item under review keeps its status; review findings live in `docs/reviews/` (RWANG:Review) and the audit report.
 
 ## 4. Audit checks (in order)
 

@@ -6,7 +6,7 @@ here="$(cd "$(dirname "$0")" && pwd)"
 target="${1:-.}"
 mkdir -p "$target"
 
-for f in RWANG-MASTERPLAN.md RWANG-REVIEW.md RWANG-OPTIMIZE.md RWANG-VERSION.md; do
+for f in RWANG-MASTERPLAN.md RWANG-CORE.md RWANG-REVIEW.md RWANG-OPTIMIZE.md RWANG-VERSION.md; do
   if [ -f "$target/$f" ]; then echo "keep   $f (already present)"; else cp "$here/$f" "$target/$f"; echo "add    $f"; fi
 done
 for pointer in AGENTS.md CLAUDE.md; do

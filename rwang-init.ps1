@@ -4,7 +4,7 @@ param([string]$Target = ".")
 $here = $PSScriptRoot
 New-Item -ItemType Directory -Force -Path $Target | Out-Null
 
-foreach ($f in @("RWANG-MASTERPLAN.md","RWANG-REVIEW.md","RWANG-OPTIMIZE.md","RWANG-VERSION.md")) {
+foreach ($f in @("RWANG-MASTERPLAN.md","RWANG-CORE.md","RWANG-REVIEW.md","RWANG-OPTIMIZE.md","RWANG-VERSION.md")) {
     $dst = Join-Path $Target $f
     if (Test-Path $dst) { Write-Host "keep   $f (already present)" }
     else { Copy-Item (Join-Path $here $f) $dst; Write-Host "add    $f" }
