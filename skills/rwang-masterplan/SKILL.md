@@ -9,11 +9,12 @@ This skill runs RWANG:MasterPlan in the current working directory. The canonical
 
 ## Steps
 
-1. **Install RWANG:MasterPlan if missing.**
-   - If the project root has no `RWANG-MASTERPLAN.md`, copy `RWANG-MASTERPLAN.md` from this skill's directory into the project root. Never overwrite an existing copy — the project's copy is authoritative for that project.
-   - If the project root has no `CLAUDE.md`, create it with exactly: `Read RWANG-MASTERPLAN.md and execute its Bootstrap Protocol immediately.`
-   - If the project root has no `AGENTS.md`, create it with the same one line (so non-Claude agents bootstrap too).
+1. **Install RWANG into the project if missing** (makes it usable by any agent, not just Claude Code).
+   - For each of `RWANG-MASTERPLAN.md`, `RWANG-REVIEW.md`, `RWANG-OPTIMIZE.md`: if the project root lacks it, copy it from this skill's directory. Never overwrite an existing copy — the project's copy is authoritative.
+   - If the project root has no `AGENTS.md`, copy `AGENTS.md` from this skill's directory (the RWANG command-dispatch table that Codex/Cursor/other agents auto-load).
+   - If the project root has no `CLAUDE.md`, copy `CLAUDE.md` from this skill's directory.
    - Never create or overwrite `README.md` — it is reserved for the project's human-facing readme.
+   - If a bundled file is absent from this skill's directory, fetch it from https://github.com/Freshair129/RWANG-PROMAX.
 
 2. **Read the project's `RWANG-MASTERPLAN.md` in full.** The copy in the project — not this skill — is the source of truth for all rules.
 

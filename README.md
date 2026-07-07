@@ -24,50 +24,49 @@ Drop one file into any project folder. Tell your agent to read it. The agent the
 4. **Stops at approval gates** — you (the human owner) are the only approval authority; approved phases are architecturally frozen
 5. **Implements wave by wave** — from a machine-readable `IMPLEMENTATION_QUEUE.json`, with deterministic verification (compilers and tests, never LLM-as-judge)
 
-Works with Claude Code, Codex, Cursor, local LLMs — anything that can read a Markdown file and follow instructions.
+Works with **Claude Code, Codex, Cursor, Cline, Aider, and local LLMs** — anything that can read a Markdown file and follow instructions. RWANG is just files; there is no runtime to install.
 
 ## Quick Start
-
-### Option A — Claude Code skill (recommended)
-
-Installs once, works in every project on your machine:
 
 ```sh
 git clone https://github.com/Freshair129/RWANG-PROMAX.git
 cd RWANG-PROMAX
+```
+
+### For Claude Code — install as skills (works in every project)
+
+```sh
 ./install.sh        # macOS / Linux / Git Bash
-# or
 powershell -ExecutionPolicy Bypass -File install.ps1   # Windows
 ```
 
-Then open any project folder in Claude Code and type:
+Then open any project folder and type `RWANG:MasterPlan`, `RWANG:Review`, or `RWANG:Optimize`. The MasterPlan skill drops the needed files into the project on first use and auto-resumes from saved phase state next session — type anything ("continue", "ทำต่อ") and it picks up where it left off.
 
-```
-RWANG:MasterPlan
-```
+### For Codex, Cursor, Cline, Aider, local LLMs — drop files into your project
 
-The skill installs `RWANG-MASTERPLAN.md` into the project (if missing), creates `CLAUDE.md` / `AGENTS.md` pointers, and starts the Bootstrap Protocol. Next sessions auto-resume from the saved phase state — type anything ("continue", "ทำต่อ") and it picks up where it left off.
-
-The installer installs the whole family, so you can also type `RWANG:Review` (review a diff, task, wave, or phase — report only, ranked by severity) and `RWANG:Optimize` (optimize with before/after measurements, reverting anything that doesn't provably improve).
-
-### Option B — Any agent, no install
-
-Copy three files into your project root:
-
-```
-RWANG-MASTERPLAN.md      ← the MasterPlan
-templates/CLAUDE.md      ← pointer for Claude Code (auto-loaded)
-templates/AGENTS.md      ← pointer for Codex / Cursor / others
+```sh
+./rwang-init.sh /path/to/your/project        # macOS / Linux / Git Bash
+.\rwang-init.ps1 C:\path\to\your\project      # Windows
 ```
 
-Then tell your agent: **"Read RWANG-MASTERPLAN.md and execute its Bootstrap Protocol."**
+This copies the three module files plus `AGENTS.md` (read automatically by Codex/Cursor/etc.) and `CLAUDE.md` into your project. Then just tell your agent **`RWANG:MasterPlan`** — it reads `AGENTS.md`, learns the command dispatch table, and starts. `RWANG:Review` and `RWANG:Optimize` work the same way.
+
+No script? Copy these into your project root by hand and tell the agent to read `AGENTS.md`:
+
+```
+RWANG-MASTERPLAN.md  RWANG-REVIEW.md  RWANG-OPTIMIZE.md
+AGENTS.md   (from templates/)
+```
 
 ## How it works
 
 ```
 your-project/
 ├─ RWANG-MASTERPLAN.md          ← the MasterPlan (rules of engagement)
-├─ CLAUDE.md / AGENTS.md        ← one-line pointers, auto-loaded by agents
+├─ RWANG-REVIEW.md              ← RWANG:Review module
+├─ RWANG-OPTIMIZE.md            ← RWANG:Optimize module
+├─ AGENTS.md                    ← command dispatch table (Codex/Cursor/others auto-load this)
+├─ CLAUDE.md                    ← same dispatch for Claude Code
 ├─ README.md                    ← reserved for humans (never touched)
 ├─ project/                     ← YOUR input: specs, ideas, notes (read-only for agents)
 ├─ docs/                        ← generated deliverables (Markdown, for humans)
@@ -101,14 +100,16 @@ Full rules are in [RWANG-MASTERPLAN.md](./RWANG-MASTERPLAN.md) — it is self-co
 
 (Colons can't appear in Windows filenames or skill names, so disk names use hyphens.)
 
+**How each agent finds the commands:** Claude Code discovers the installed skills by name; Codex, Cursor, Cline, Aider and others read `AGENTS.md`, which maps every `RWANG:` command to the file to open. Either way, typing `RWANG:Review` makes the agent read `RWANG-REVIEW.md` and follow it. The module files are plain Markdown with no tool-specific assumptions.
+
 ---
 
 ## 🇹🇭 ภาษาไทย
 
 **RWANG:MasterPlan** คือโปรโตคอลสากลแบบวางไฟล์เดียวใช้ได้ทุกโปรเจกต์: บอก agent ว่า "อ่าน MasterPlan" แล้วมันจะสำรวจ repo หาสเปกของคุณใน `project/` เช็คสถานะจาก `state/PROJECT_STATE.json` แล้วทำงานต่อจากจุดเดิมเองทันที — ออกแบบสถาปัตยกรรมครบ 7 phase ก่อนเขียนโค้ด หยุดรอคุณอนุมัติทุกด่าน (พิมพ์ "อนุมัติ" เพื่อไปต่อ) และแตกงานเป็น task ให้ agent หลายตัว (รวมถึง local LLM) ทำขนานกันได้โดยไม่ตีกัน
 
-**ติดตั้งแบบ Claude Code skill:** รัน `install.ps1` (Windows) หรือ `install.sh` แล้วพิมพ์ `RWANG:MasterPlan` ในโปรเจกต์ไหนก็ได้
-**ใช้กับ agent อื่น:** ก๊อป `RWANG-MASTERPLAN.md` + ไฟล์ใน `templates/` ไปวางที่ root ของโปรเจกต์
+**Claude Code:** รัน `install.ps1` (Windows) หรือ `install.sh` — ติดตั้งเป็น skill ใช้ได้ทุกโปรเจกต์ พิมพ์ `RWANG:MasterPlan` ได้เลย
+**Codex / Cursor / Cline / Aider / local LLM:** รัน `rwang-init.ps1 C:\path\to\project` (หรือ `rwang-init.sh`) เพื่อวางไฟล์ RWANG ลงในโปรเจกต์ — agent จะอ่าน `AGENTS.md` เห็นตารางคำสั่งแล้วทำงานตาม `RWANG:MasterPlan` / `RWANG:Review` / `RWANG:Optimize` ได้ทันที
 
 โมดูลเสริม (ติดตั้งมาพร้อมกัน): `RWANG:Review` รีวิวโค้ดหลายมิติแบบรายงานอย่างเดียวไม่แก้เอง และ `RWANG:Optimize` ปรับ performance แบบวัดผลก่อน-หลัง อะไรที่วัดแล้วไม่ดีขึ้นจะ revert ทิ้ง — ทั้งคู่เคารพกฎ RWANG: ห้ามแตะสถาปัตยกรรมและ public API
 
