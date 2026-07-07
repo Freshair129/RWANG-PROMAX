@@ -13,6 +13,19 @@ for pointer in AGENTS.md CLAUDE.md; do
   if [ -f "$target/$pointer" ]; then echo "keep   $pointer (already present)"; else cp "$here/templates/$pointer" "$target/$pointer"; echo "add    $pointer"; fi
 done
 
+# install the RWANG write gate (pre-commit hook) if the target is a git repo
+if [ -d "$target/.git" ]; then
+  if [ -f "$target/.git/hooks/pre-commit" ]; then
+    echo "keep   .git/hooks/pre-commit (already exists — merge gate/pre-commit manually)"
+  else
+    cp "$here/gate/pre-commit" "$target/.git/hooks/pre-commit"
+    chmod +x "$target/.git/hooks/pre-commit"
+    echo "add    .git/hooks/pre-commit (RWANG write gate)"
+  fi
+else
+  echo "note   not a git repo — write gate not installed (run 'git init' then re-run to enable it)"
+fi
+
 echo ""
 echo "RWANG installed into: $target"
 echo "Put your project spec/notes in $target/project/ then tell your agent: RWANG:MasterPlan"

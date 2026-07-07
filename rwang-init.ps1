@@ -15,6 +15,20 @@ foreach ($p in @("AGENTS.md","CLAUDE.md")) {
     else { Copy-Item (Join-Path $here "templates\$p") $dst; Write-Host "add    $p" }
 }
 
+# install the RWANG write gate (pre-commit hook) if the target is a git repo
+$gitDir = Join-Path $Target ".git"
+if (Test-Path $gitDir) {
+    $hook = Join-Path $gitDir "hooks\pre-commit"
+    if (Test-Path $hook) { Write-Host "keep   .git/hooks/pre-commit (already exists - merge gate/pre-commit manually)" }
+    else {
+        New-Item -ItemType Directory -Force -Path (Join-Path $gitDir "hooks") | Out-Null
+        Copy-Item (Join-Path $here "gate\pre-commit") $hook
+        Write-Host "add    .git/hooks/pre-commit (RWANG write gate)"
+    }
+} else {
+    Write-Host "note   not a git repo - write gate not installed (run 'git init' then re-run to enable it)"
+}
+
 Write-Host ""
 Write-Host "RWANG installed into: $Target"
 Write-Host "Put your project spec/notes in $Target\project\ then tell your agent: RWANG:MasterPlan"
