@@ -4,5 +4,6 @@ This project uses the RWANG: protocol family. When the user invokes a command, r
 - RWANG:MasterPlan → RWANG-MASTERPLAN.md
 - RWANG:Review → RWANG-REVIEW.md
 - RWANG:Optimize → RWANG-OPTIMIZE.md
+- RWANG:Version → RWANG-VERSION.md
 
-(In Claude Code these also run as installed skills: /rwang-masterplan, /rwang-review, /rwang-optimize.)
+(In Claude Code these also run as installed skills: /rwang-masterplan, /rwang-review, /rwang-optimize, /rwang-version.)

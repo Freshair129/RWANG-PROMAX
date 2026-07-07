@@ -9,6 +9,7 @@ Current modules:
 - **RWANG:MasterPlan** — architecture-first, multi-agent project protocol (design everything through gated phases before code)
 - **RWANG:Review** — multi-dimensional engineering review that never redesigns architecture
 - **RWANG:Optimize** — measured, architecture-preserving optimization (baseline → change → re-measure)
+- **RWANG:Version** — SemVer (x.y.z) for every doc and code artifact, with a central registry audited against reality
 
 > ภาษาไทยอยู่ด้านล่าง 🇹🇭
 
@@ -65,6 +66,7 @@ your-project/
 ├─ RWANG-MASTERPLAN.md          ← the MasterPlan (rules of engagement)
 ├─ RWANG-REVIEW.md              ← RWANG:Review module
 ├─ RWANG-OPTIMIZE.md            ← RWANG:Optimize module
+├─ RWANG-VERSION.md             ← RWANG:Version module (registry: state/VERSION_REGISTRY.json)
 ├─ AGENTS.md                    ← command dispatch table (Codex/Cursor/others auto-load this)
 ├─ CLAUDE.md                    ← same dispatch for Claude Code
 ├─ README.md                    ← reserved for humans (never touched)
@@ -96,6 +98,7 @@ Full rules are in [RWANG-MASTERPLAN.md](./RWANG-MASTERPLAN.md) — it is self-co
 | `RWANG:MasterPlan` | `rwang-masterplan` | Architect — designs everything, writes no production code |
 | `RWANG:Review` | `rwang-review` | Reviewer — reports findings, changes nothing, never redesigns |
 | `RWANG:Optimize` | `rwang-optimize` | Implementation — optimizes internals, never touches architecture or public APIs |
+| `RWANG:Version` | `rwang-version` | Registrar — SemVer registry for every artifact; audits registry vs disk (sha256 drift detection) |
 | `RWANG:<Module>` (future) | `rwang-<module>` | — |
 
 (Colons can't appear in Windows filenames or skill names, so disk names use hyphens.)
@@ -111,7 +114,7 @@ Full rules are in [RWANG-MASTERPLAN.md](./RWANG-MASTERPLAN.md) — it is self-co
 **Claude Code:** รัน `install.ps1` (Windows) หรือ `install.sh` — ติดตั้งเป็น skill ใช้ได้ทุกโปรเจกต์ พิมพ์ `RWANG:MasterPlan` ได้เลย
 **Codex / Cursor / Cline / Aider / local LLM:** รัน `rwang-init.ps1 C:\path\to\project` (หรือ `rwang-init.sh`) เพื่อวางไฟล์ RWANG ลงในโปรเจกต์ — agent จะอ่าน `AGENTS.md` เห็นตารางคำสั่งแล้วทำงานตาม `RWANG:MasterPlan` / `RWANG:Review` / `RWANG:Optimize` ได้ทันที
 
-โมดูลเสริม (ติดตั้งมาพร้อมกัน): `RWANG:Review` รีวิวโค้ดหลายมิติแบบรายงานอย่างเดียวไม่แก้เอง และ `RWANG:Optimize` ปรับ performance แบบวัดผลก่อน-หลัง อะไรที่วัดแล้วไม่ดีขึ้นจะ revert ทิ้ง — ทั้งคู่เคารพกฎ RWANG: ห้ามแตะสถาปัตยกรรมและ public API
+โมดูลเสริม (ติดตั้งมาพร้อมกัน): `RWANG:Review` รีวิวโค้ดหลายมิติแบบรายงานอย่างเดียวไม่แก้เอง, `RWANG:Optimize` ปรับ performance แบบวัดผลก่อน-หลัง อะไรที่วัดแล้วไม่ดีขึ้นจะ revert ทิ้ง — ทั้งคู่เคารพกฎ RWANG: ห้ามแตะสถาปัตยกรรมและ public API — และ `RWANG:Version` ระบบ version x.y.z ของทุกเอกสาร/โค้ด มี registry กลาง (`state/VERSION_REGISTRY.json`) พร้อม audit จับ drift ด้วย sha256: เอกสาร draft = 0.x, phase อนุมัติแล้ว = 1.0.0 (frozen), จะ bump MAJOR หลัง freeze ต้องมี change request ก่อน
 
 ## License
 

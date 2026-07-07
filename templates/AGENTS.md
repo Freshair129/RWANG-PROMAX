@@ -15,8 +15,9 @@ When the user invokes a RWANG command, open the matching file at the project roo
 | `RWANG:MasterPlan` | `RWANG-MASTERPLAN.md` | Bootstrap / continue the architecture-first project |
 | `RWANG:Review` | `RWANG-REVIEW.md` | Engineering review of a diff / task / wave / phase — report only |
 | `RWANG:Optimize` | `RWANG-OPTIMIZE.md` | Measured, architecture-preserving optimization |
+| `RWANG:Version` | `RWANG-VERSION.md` | SemVer registry: register, bump, audit registry vs reality |
 
-The command may include a target after it (e.g. `RWANG:Review src/parser.ts`, `RWANG:Optimize startup time`) — pass it to the module as its target.
+The command may include a target or action after it (e.g. `RWANG:Review src/parser.ts`, `RWANG:Version bump docs/10_DATA_MODELS.md minor "add event schema"`) — pass it to the module.
 
 ## Non-negotiable rules (from RWANG-MASTERPLAN.md)
 
