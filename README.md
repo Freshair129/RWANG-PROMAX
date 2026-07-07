@@ -4,7 +4,11 @@
 
 The **RWANG:** family is a set of drop-in prompt modules that turn any AI coding agent into a disciplined engineering organization. No SaaS, no dependencies — just Markdown files your agent reads and obeys.
 
-First module: **RWANG:MasterPlan** — an architecture-first, multi-agent project charter.
+Current modules:
+
+- **RWANG:MasterPlan** — architecture-first, multi-agent project charter (design everything through gated phases before code)
+- **RWANG:Review** — multi-dimensional engineering review that never redesigns architecture
+- **RWANG:Optimize** — measured, architecture-preserving optimization (baseline → change → re-measure)
 
 > ภาษาไทยอยู่ด้านล่าง 🇹🇭
 
@@ -43,6 +47,8 @@ RWANG:MasterPlan
 ```
 
 The skill installs `RWANG-MASTERPLAN.md` into the project (if missing), creates `CLAUDE.md` / `AGENTS.md` pointers, and starts the Bootstrap Protocol. Next sessions auto-resume from the saved phase state — type anything ("continue", "ทำต่อ") and it picks up where it left off.
+
+The installer installs the whole family, so you can also type `RWANG:Review` (review a diff, task, wave, or phase — report only, ranked by severity) and `RWANG:Optimize` (optimize with before/after measurements, reverting anything that doesn't provably improve).
 
 ### Option B — Any agent, no install
 
@@ -86,10 +92,12 @@ Full rules are in [RWANG-MASTERPLAN.md](./RWANG-MASTERPLAN.md) — it is self-co
 
 ## The RWANG: family
 
-| In conversation | Skill name | File on disk |
+| In conversation | Skill name | Role (per the charter) |
 |---|---|---|
-| `RWANG:MasterPlan` | `rwang-masterplan` | `RWANG-MASTERPLAN.md` |
-| `RWANG:<Module>` (future) | `rwang-<module>` | `RWANG-<MODULE>.md` |
+| `RWANG:MasterPlan` | `rwang-masterplan` | Architect — designs everything, writes no production code |
+| `RWANG:Review` | `rwang-review` | Reviewer — reports findings, changes nothing, never redesigns |
+| `RWANG:Optimize` | `rwang-optimize` | Implementation — optimizes internals, never touches architecture or public APIs |
+| `RWANG:<Module>` (future) | `rwang-<module>` | — |
 
 (Colons can't appear in Windows filenames or skill names, so disk names use hyphens.)
 
@@ -101,6 +109,8 @@ Full rules are in [RWANG-MASTERPLAN.md](./RWANG-MASTERPLAN.md) — it is self-co
 
 **ติดตั้งแบบ Claude Code skill:** รัน `install.ps1` (Windows) หรือ `install.sh` แล้วพิมพ์ `RWANG:MasterPlan` ในโปรเจกต์ไหนก็ได้
 **ใช้กับ agent อื่น:** ก๊อป `RWANG-MASTERPLAN.md` + ไฟล์ใน `templates/` ไปวางที่ root ของโปรเจกต์
+
+โมดูลเสริม (ติดตั้งมาพร้อมกัน): `RWANG:Review` รีวิวโค้ดหลายมิติแบบรายงานอย่างเดียวไม่แก้เอง และ `RWANG:Optimize` ปรับ performance แบบวัดผลก่อน-หลัง อะไรที่วัดแล้วไม่ดีขึ้นจะ revert ทิ้ง — ทั้งคู่เคารพกฎ charter: ห้ามแตะสถาปัตยกรรมและ public API
 
 ## License
 

@@ -1,7 +1,12 @@
-# Install the RWANG:MasterPlan skill for Claude Code (all projects on this machine).
-$src = Join-Path $PSScriptRoot "skills\rwang-masterplan"
-$dest = Join-Path $HOME ".claude\skills\rwang-masterplan"
+# Install the RWANG: skill family for Claude Code (all projects on this machine).
+$src = Join-Path $PSScriptRoot "skills"
+$dest = Join-Path $HOME ".claude\skills"
 New-Item -ItemType Directory -Force -Path $dest | Out-Null
-Copy-Item -Path (Join-Path $src "*") -Destination $dest -Force
-Write-Host "Installed RWANG:MasterPlan skill to $dest"
-Write-Host "Open any project in Claude Code and type: RWANG:MasterPlan"
+Get-ChildItem -Path $src -Directory | ForEach-Object {
+    $target = Join-Path $dest $_.Name
+    New-Item -ItemType Directory -Force -Path $target | Out-Null
+    Copy-Item -Path (Join-Path $_.FullName "*") -Destination $target -Force
+    Write-Host "Installed $($_.Name)"
+}
+Write-Host ""
+Write-Host "Done. Open any project in Claude Code and type: RWANG:MasterPlan, RWANG:Review, or RWANG:Optimize"
