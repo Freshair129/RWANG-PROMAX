@@ -1,4 +1,4 @@
-If RWANG-CORE.md exists, its rules R1–R10 are always in effect — read it first.
+If RWANG-CORE.md exists, its rules R1–R6 are always in effect — read it first.
 Read RWANG-MASTERPLAN.md and execute its Bootstrap Protocol immediately.
 
 This project uses the RWANG: protocol family. When the user invokes a command, read the matching file and follow it:

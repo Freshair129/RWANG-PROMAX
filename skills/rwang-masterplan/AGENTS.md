@@ -4,7 +4,7 @@ This project uses the **RWANG:** protocol family. It is tool-neutral — these i
 
 ## Always in effect
 
-If `RWANG-CORE.md` exists at the project root, its rules **R1–R10 apply to every task at all times** — read it before doing anything else.
+If `RWANG-CORE.md` exists at the project root, its rules **R1–R6 apply to every task at all times** — read it before doing anything else.
 
 ## On session start
 
@@ -17,7 +17,7 @@ When the user invokes a RWANG command, open the matching file at the project roo
 | User says | Read this file | What it does |
 |---|---|---|
 | `RWANG:MasterPlan` | `RWANG-MASTERPLAN.md` | Bootstrap / continue the architecture-first project |
-| `RWANG:Core` | `RWANG-CORE.md` | (Re)load the standing rules R1–R10 — always in effect once present |
+| `RWANG:Core` | `RWANG-CORE.md` | (Re)load the standing rules R1–R6 — always in effect once present |
 | `RWANG:Review` | `RWANG-REVIEW.md` | Engineering review of a diff / task / wave / phase — report only |
 | `RWANG:Optimize` | `RWANG-OPTIMIZE.md` | Measured, architecture-preserving optimization |
 | `RWANG:Version` | `RWANG-VERSION.md` | Sidecar SemVer registry: register, bump, audit + commit write gate |
