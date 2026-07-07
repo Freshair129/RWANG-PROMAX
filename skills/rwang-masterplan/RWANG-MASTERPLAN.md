@@ -1,13 +1,13 @@
-# RWANG:MasterPlan — Universal Architecture-First Project Charter
+# RWANG:MasterPlan — Universal Architecture-First Protocol
 
 > Part of the **RWANG:** command family. On disk this file is `RWANG-MASTERPLAN.md` (Windows forbids `:` in filenames); in conversation refer to it as **RWANG:MasterPlan**.
 >
 > **How to use:** Drop this `RWANG-MASTERPLAN.md` into any project folder — empty or existing.
 > Then tell any capable agent: **"RWANG:MasterPlan"** / **"อ่าน MasterPlan"** — or add a one-line pointer in the file your agent auto-loads (`CLAUDE.md` for Claude Code, `AGENTS.md` for Codex/Cursor/others): *"Read RWANG-MASTERPLAN.md and execute its Bootstrap Protocol immediately."*
 > The agent must execute §1 (Bootstrap Protocol) immediately and start working. No other prompt is required.
-> `README.md` is NOT used by this charter — it stays reserved for the project's human-facing readme.
+> `README.md` is NOT used by RWANG — it stays reserved for the project's human-facing readme.
 
-This charter is project-agnostic. It defines *how* work is done; *what* is built is discovered from the repository itself (see §1 and §2).
+RWANG:MasterPlan is project-agnostic. It defines *how* work is done; *what* is built is discovered from the repository itself (see §1 and §2).
 
 ---
 
@@ -18,7 +18,7 @@ Upon reading this file, an agent MUST perform these steps in order, without wait
 **Step 1 — Inventory the repository.**
 Look for, in this order:
 1. `state/PROJECT_STATE.json` — the current phase and status (see §3)
-2. `project/` — project definition materials supplied by the owner (specs, ideas, notes, requirements, existing code descriptions). Files at the repo root that are not this charter, not agent pointer files (`CLAUDE.md`, `AGENTS.md`), and not generated deliverables also count as project materials (including `README.md` if the owner wrote one).
+2. `project/` — project definition materials supplied by the owner (specs, ideas, notes, requirements, existing code descriptions). Files at the repo root that are not this file, not agent pointer files (`CLAUDE.md`, `AGENTS.md`), and not generated deliverables also count as project materials (including `README.md` if the owner wrote one).
 3. `docs/` — deliverables generated in previous sessions
 4. `queue/`, `state/*.jsonl` — machine and runtime layers (see §8)
 
@@ -36,7 +36,7 @@ Look for, in this order:
 - Project materials found → they are the input to Phase 0. Read them fully before producing anything.
 - No project materials found and state is fresh → ask the owner exactly one question: *"What should this project be?"* This is the **only** situation in which bootstrap stops to ask for input.
 
-**Step 4 — Execute the current phase** according to this charter. On phase completion: write `docs/PHASE_<N>_REVIEW.md`, update `state/PROJECT_STATE.json` to `awaiting_approval`, report a concise summary to the owner, and stop.
+**Step 4 — Execute the current phase** according to this MasterPlan. On phase completion: write `docs/PHASE_<N>_REVIEW.md`, update `state/PROJECT_STATE.json` to `awaiting_approval`, report a concise summary to the owner, and stop.
 
 **Approval authority:** the human project owner. "Approved" means the owner explicitly says so (e.g. "approve", "อนุมัติ", "ผ่าน"). No agent may self-approve a phase. Upon approval, the agent records it in the state file and continues.
 
@@ -47,8 +47,8 @@ Look for, in this order:
 Agents MUST create and maintain this structure. Owner-supplied materials in `project/` are read-only for agents.
 
 ```
-RWANG-MASTERPLAN.md            ← this charter (never modified by agents)
-CLAUDE.md / AGENTS.md          ← one-line pointers to this charter (auto-loaded by agents)
+RWANG-MASTERPLAN.md            ← the RWANG MasterPlan (never modified by agents)
+CLAUDE.md / AGENTS.md          ← one-line pointers to this file (auto-loaded by agents)
 README.md                      ← human-facing project readme (Phase 0 output or owner-written)
 project/                       ← owner's input materials (agents never modify)
 docs/                          ← Layer 1: human-readable deliverables (§9)

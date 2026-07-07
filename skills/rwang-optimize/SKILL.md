@@ -5,7 +5,7 @@ description: RWANG:Optimize — measured, architecture-preserving optimization. 
 
 # RWANG:Optimize
 
-Optimizes **implementation, never architecture** — the Implementation-agent boundary from the RWANG:MasterPlan charter. Every change must be justified by a measurement.
+Optimizes **implementation, never architecture** — the Implementation-agent boundary from RWANG:MasterPlan. Every change must be justified by a measurement.
 
 ## 1. Resolve the target
 
@@ -22,12 +22,12 @@ Optimizes **implementation, never architecture** — the Implementation-agent bo
 
 Profile or inspect to find hotspots. Rank by expected impact ÷ effort. Typical wins: algorithmic complexity, N+1 I/O, caching/memoization, unnecessary re-renders/allocations, lazy loading, dead code and duplicate logic, over-general abstractions used once (simplification counts as optimization).
 
-## 4. Hard constraints (charter role boundaries)
+## 4. Hard constraints (RWANG role boundaries)
 
 MAY: optimize implementation, improve performance, improve typing, add/adjust tests, simplify private internals.
 MUST NOT: redesign architecture, rename public APIs, merge modules, remove abstraction layers, change communication protocols, change folder structure.
 
-If the highest-impact optimization requires crossing that line: **stop, do not apply it**, and draft `ARCHITECTURE_CHANGE_REQUEST.md` (reason, impact, affected modules, migration plan, risks, alternatives) for the owner to approve — per the charter.
+If the highest-impact optimization requires crossing that line: **stop, do not apply it**, and draft `ARCHITECTURE_CHANGE_REQUEST.md` (reason, impact, affected modules, migration plan, risks, alternatives) for the owner to approve — per RWANG rules.
 
 ## 5. Apply incrementally, verify each step
 
@@ -37,9 +37,9 @@ For each optimization, one at a time:
 3. Re-measure against the baseline.
 4. Keep only changes with a real measured improvement (or clear, stated size/readability gains); revert neutral or regressive ones — do not leave "probably faster" code behind.
 
-## 6. Record (MasterPlan projects only)
+## 6. Record (RWANG projects only)
 
-Append events to `state/events.jsonl` (`{"type": "Benchmark", ...}` for measurements, `{"type": "Optimize", ...}` per applied change) following the charter's stable-ID rules.
+Append events to `state/events.jsonl` (`{"type": "Benchmark", ...}` for measurements, `{"type": "Optimize", ...}` per applied change) following the RWANG stable-ID rules.
 
 ## 7. Report format
 

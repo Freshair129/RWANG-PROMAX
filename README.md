@@ -1,12 +1,12 @@
 # RWANG PROMAX
 
-**Universal, agent-agnostic project charters for AI-driven development.**
+**Universal, agent-agnostic project protocols for AI-driven development.**
 
 The **RWANG:** family is a set of drop-in prompt modules that turn any AI coding agent into a disciplined engineering organization. No SaaS, no dependencies — just Markdown files your agent reads and obeys.
 
 Current modules:
 
-- **RWANG:MasterPlan** — architecture-first, multi-agent project charter (design everything through gated phases before code)
+- **RWANG:MasterPlan** — architecture-first, multi-agent project protocol (design everything through gated phases before code)
 - **RWANG:Review** — multi-dimensional engineering review that never redesigns architecture
 - **RWANG:Optimize** — measured, architecture-preserving optimization (baseline → change → re-measure)
 
@@ -55,7 +55,7 @@ The installer installs the whole family, so you can also type `RWANG:Review` (re
 Copy three files into your project root:
 
 ```
-RWANG-MASTERPLAN.md      ← the charter
+RWANG-MASTERPLAN.md      ← the MasterPlan
 templates/CLAUDE.md      ← pointer for Claude Code (auto-loaded)
 templates/AGENTS.md      ← pointer for Codex / Cursor / others
 ```
@@ -66,7 +66,7 @@ Then tell your agent: **"Read RWANG-MASTERPLAN.md and execute its Bootstrap Prot
 
 ```
 your-project/
-├─ RWANG-MASTERPLAN.md          ← the charter (rules of engagement)
+├─ RWANG-MASTERPLAN.md          ← the MasterPlan (rules of engagement)
 ├─ CLAUDE.md / AGENTS.md        ← one-line pointers, auto-loaded by agents
 ├─ README.md                    ← reserved for humans (never touched)
 ├─ project/                     ← YOUR input: specs, ideas, notes (read-only for agents)
@@ -92,7 +92,7 @@ Full rules are in [RWANG-MASTERPLAN.md](./RWANG-MASTERPLAN.md) — it is self-co
 
 ## The RWANG: family
 
-| In conversation | Skill name | Role (per the charter) |
+| In conversation | Skill name | Role (per RWANG:MasterPlan) |
 |---|---|---|
 | `RWANG:MasterPlan` | `rwang-masterplan` | Architect — designs everything, writes no production code |
 | `RWANG:Review` | `rwang-review` | Reviewer — reports findings, changes nothing, never redesigns |
@@ -105,12 +105,12 @@ Full rules are in [RWANG-MASTERPLAN.md](./RWANG-MASTERPLAN.md) — it is self-co
 
 ## 🇹🇭 ภาษาไทย
 
-**RWANG:MasterPlan** คือ charter สากลแบบวางไฟล์เดียวใช้ได้ทุกโปรเจกต์: บอก agent ว่า "อ่าน MasterPlan" แล้วมันจะสำรวจ repo หาสเปกของคุณใน `project/` เช็คสถานะจาก `state/PROJECT_STATE.json` แล้วทำงานต่อจากจุดเดิมเองทันที — ออกแบบสถาปัตยกรรมครบ 7 phase ก่อนเขียนโค้ด หยุดรอคุณอนุมัติทุกด่าน (พิมพ์ "อนุมัติ" เพื่อไปต่อ) และแตกงานเป็น task ให้ agent หลายตัว (รวมถึง local LLM) ทำขนานกันได้โดยไม่ตีกัน
+**RWANG:MasterPlan** คือโปรโตคอลสากลแบบวางไฟล์เดียวใช้ได้ทุกโปรเจกต์: บอก agent ว่า "อ่าน MasterPlan" แล้วมันจะสำรวจ repo หาสเปกของคุณใน `project/` เช็คสถานะจาก `state/PROJECT_STATE.json` แล้วทำงานต่อจากจุดเดิมเองทันที — ออกแบบสถาปัตยกรรมครบ 7 phase ก่อนเขียนโค้ด หยุดรอคุณอนุมัติทุกด่าน (พิมพ์ "อนุมัติ" เพื่อไปต่อ) และแตกงานเป็น task ให้ agent หลายตัว (รวมถึง local LLM) ทำขนานกันได้โดยไม่ตีกัน
 
 **ติดตั้งแบบ Claude Code skill:** รัน `install.ps1` (Windows) หรือ `install.sh` แล้วพิมพ์ `RWANG:MasterPlan` ในโปรเจกต์ไหนก็ได้
 **ใช้กับ agent อื่น:** ก๊อป `RWANG-MASTERPLAN.md` + ไฟล์ใน `templates/` ไปวางที่ root ของโปรเจกต์
 
-โมดูลเสริม (ติดตั้งมาพร้อมกัน): `RWANG:Review` รีวิวโค้ดหลายมิติแบบรายงานอย่างเดียวไม่แก้เอง และ `RWANG:Optimize` ปรับ performance แบบวัดผลก่อน-หลัง อะไรที่วัดแล้วไม่ดีขึ้นจะ revert ทิ้ง — ทั้งคู่เคารพกฎ charter: ห้ามแตะสถาปัตยกรรมและ public API
+โมดูลเสริม (ติดตั้งมาพร้อมกัน): `RWANG:Review` รีวิวโค้ดหลายมิติแบบรายงานอย่างเดียวไม่แก้เอง และ `RWANG:Optimize` ปรับ performance แบบวัดผลก่อน-หลัง อะไรที่วัดแล้วไม่ดีขึ้นจะ revert ทิ้ง — ทั้งคู่เคารพกฎ RWANG: ห้ามแตะสถาปัตยกรรมและ public API
 
 ## License
 
