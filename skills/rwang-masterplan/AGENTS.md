@@ -16,6 +16,7 @@ When the user invokes a RWANG command, open the matching file at the project roo
 
 | User says | Read this file | What it does |
 |---|---|---|
+| `RWANG:Init [plan\|docs]` | `RWANG-INIT.md` | One-command onboarding: structure+governance / +Phase 0 / +all design docs to ready-to-code |
 | `RWANG:MasterPlan` | `RWANG-MASTERPLAN.md` | Bootstrap / continue the architecture-first project |
 | `RWANG:Core` | `RWANG-CORE.md` | (Re)load the standing rules R1–R6 — always in effect once present |
 | `RWANG:Review` | `RWANG-REVIEW.md` | Engineering review of a diff / task / wave / phase — report only |

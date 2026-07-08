@@ -6,6 +6,7 @@ The **RWANG:** family is a set of drop-in prompt modules that turn any AI coding
 
 Current modules:
 
+- **RWANG:Init** — one command from zero to ready: structure + governance (`RWANG:Init`), + master plan (`RWANG:Init plan`), or the whole doc stage until ready-to-code (`RWANG:Init docs`)
 - **RWANG:MasterPlan** — architecture-first, multi-agent project protocol (design everything through gated phases before code)
 - **RWANG:Core** — six standing behavior rules, always in effect once installed: assumptions first, simplicity, surgical & scoped changes, C-1/C-2/C-3 classification (light tasks stay light — doc-first only from C-2 up), RCA-first, verify to done
 - **RWANG:Review** — multi-dimensional engineering review that never redesigns architecture
@@ -39,7 +40,7 @@ iwr -useb https://raw.githubusercontent.com/Freshair129/RWANG-PROMAX/main/instal
 curl -fsSL https://raw.githubusercontent.com/Freshair129/RWANG-PROMAX/main/install.sh | sh
 ```
 
-This puts the toolkit at **`~/.rwang`** (RWANG's global home — like `~/.claude`) and registers the skill family for every harness on your machine. There is **no step 2**: open any project and invoke the skill — it installs RWANG into that project by itself on first run, and auto-resumes from saved phase state in later sessions.
+This puts the toolkit at **`~/.rwang`** (RWANG's global home — like `~/.claude`) and registers the skill family for every harness on your machine. There is **no step 2**: open any project and type **`RWANG:Init`** — structure and governance land in one shot (`RWANG:Init plan` also drafts the master plan; `RWANG:Init docs` runs the whole design stage until the docs are ready-to-code, with one consolidated approval at the end). Or just type `RWANG:MasterPlan` — it sets up what it needs and starts, auto-resuming from saved phase state in later sessions.
 
 | Harness | Skills registered at | Invoke |
 |---|---|---|
@@ -99,6 +100,7 @@ Full rules are in [RWANG-MASTERPLAN.md](./RWANG-MASTERPLAN.md) — it is self-co
 
 | In conversation | Skill name | Role (per RWANG:MasterPlan) |
 |---|---|---|
+| `RWANG:Init` | `rwang-init` | Onboarder — structure, governance, and optionally the whole doc stage; never implements |
 | `RWANG:MasterPlan` | `rwang-masterplan` | Architect — designs everything, writes no production code |
 | `RWANG:Core` | `rwang-core` | Constitution — six standing rules, always in effect once present; ceremony scales C-1→C-3 |
 | `RWANG:Review` | `rwang-review` | Reviewer — reports findings, changes nothing, never redesigns |
@@ -118,6 +120,8 @@ Full rules are in [RWANG-MASTERPLAN.md](./RWANG-MASTERPLAN.md) — it is self-co
 
 **ติดตั้งคำสั่งเดียวจบ ใช้ได้สามค่าย:** `iwr -useb https://raw.githubusercontent.com/Freshair129/RWANG-PROMAX/main/install.ps1 | iex` (Windows) หรือ `curl -fsSL .../install.sh | sh` — toolkit ลงที่ `~/.rwang` และ skill ถูกลงทะเบียนให้ **Claude Code**, **Codex CLI** (`$rwang-masterplan`), **Antigravity CLI** (`/skills`) พร้อมกัน — **ไม่มี step 2**: เปิดโปรเจกต์ไหนก็ได้แล้วเรียก skill มันจะติดตั้ง RWANG ลงโปรเจกต์นั้นเอง ไฟล์สเปกวางที่ root ได้เลย (`project/` เป็นแค่ตัวเลือกจัดระเบียบ)
 **Agent ที่ไม่มีระบบ skill (Cursor, Cline, Aider, local LLM):** รัน `~/.rwang/rwang-init.ps1 C:\path\to\project` — วางไฟล์โมดูล + `AGENTS.md` (ตารางคำสั่ง) ลงโปรเจกต์
+
+เริ่มโปรเจกต์ใหม่: พิมพ์ `RWANG:Init` = โครงสร้าง+governance พร้อมทันที / `RWANG:Init plan` = + ร่าง master plan / `RWANG:Init docs` = ลุยเอกสารออกแบบครบทุก phase จน **ready-to-code** แล้วให้คุณ review อนุมัติรวบเดียวก่อนเริ่มโค้ด
 
 โมดูลเสริม (ติดตั้งมาพร้อมกัน): `RWANG:Core` กฎพฤติกรรม 6 ข้อที่บังคับใช้ตลอดเวลา — แถลง assumption ก่อนทำ, เรียบง่าย, แก้เท่าที่ขอ, จัดระดับงาน C-1/2/3 (งานเบาลุยได้เลย doc-first เฉพาะ C-2 ขึ้นไป), หา root cause ก่อนแก้บั๊ก, verify ก่อนประกาศเสร็จ, `RWANG:Review` รีวิวโค้ดหลายมิติแบบรายงานอย่างเดียวไม่แก้เอง, `RWANG:Optimize` ปรับ performance แบบวัดผลก่อน-หลัง อะไรที่วัดแล้วไม่ดีขึ้นจะ revert ทิ้ง — ทั้งคู่เคารพกฎ RWANG: ห้ามแตะสถาปัตยกรรมและ public API — และ `RWANG:Version` ระบบ version x.y.z ของทุกเอกสาร/โค้ดแบบ**ไม่แตะไฟล์ต้นฉบับ** — metadata + changelog อยู่ใน sidecar `.rwang/` ที่ mirror ชื่อไฟล์เดิม, audit จับ drift ด้วย sha256 (แก้ไฟล์แต่ไม่ bump = โดนจับ), มี git pre-commit **write gate** ปฏิเสธ commit ที่แก้ไฟล์ลงทะเบียนโดยไม่ผ่าน bump: เอกสาร draft = 0.x, phase อนุมัติแล้ว = 1.0.0 (frozen), จะ bump MAJOR หลัง freeze ต้องมี change request ก่อน
 
