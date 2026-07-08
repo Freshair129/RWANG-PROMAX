@@ -28,45 +28,37 @@ Drop one file into any project folder. Tell your agent to read it. The agent the
 
 Works with **Claude Code, Codex, Cursor, Cline, Aider, and local LLMs** — anything that can read a Markdown file and follow instructions. RWANG is just files; there is no runtime to install.
 
-## Quick Start
+## Quick Start — one command, done
 
+```powershell
+# Windows
+iwr -useb https://raw.githubusercontent.com/Freshair129/RWANG-PROMAX/main/install.ps1 | iex
+```
 ```sh
-git clone https://github.com/Freshair129/RWANG-PROMAX.git
-cd RWANG-PROMAX
+# macOS / Linux / Git Bash
+curl -fsSL https://raw.githubusercontent.com/Freshair129/RWANG-PROMAX/main/install.sh | sh
 ```
 
-### Install as skills — Claude Code, Codex CLI, Antigravity CLI (one command)
+This puts the toolkit at **`~/.rwang`** (RWANG's global home — like `~/.claude`) and registers the skill family for every harness on your machine. There is **no step 2**: open any project and invoke the skill — it installs RWANG into that project by itself on first run, and auto-resumes from saved phase state in later sessions.
 
-```sh
-./install.sh        # macOS / Linux / Git Bash
-powershell -ExecutionPolicy Bypass -File install.ps1   # Windows
-```
-
-The same `SKILL.md` format works across harnesses, so the installer drops the whole family into every harness on your machine:
-
-| Harness | Installed to | Invoke |
+| Harness | Skills registered at | Invoke |
 |---|---|---|
 | Claude Code | `~/.claude/skills/` | type `RWANG:MasterPlan` or `/rwang-masterplan` |
 | Codex CLI | `~/.agents/skills/` | `$rwang-masterplan` — or just type `RWANG:MasterPlan` (implicit match) |
-| Antigravity CLI | `~/.gemini/antigravity-cli/skills/` | `/skills` picker — or type `RWANG:MasterPlan` (it reads `AGENTS.md`) |
+| Antigravity CLI | `~/.gemini/antigravity-cli/skills/` | `/skills` picker — or type `RWANG:MasterPlan` |
 
-The MasterPlan skill drops the needed files into the project on first use and auto-resumes from saved phase state next session — type anything ("continue", "ทำต่อ") and it picks up where it left off.
+Your spec/idea files can live **at the project root** (or in an optional `project/` folder if you have many) — the Bootstrap Protocol reads them as Phase 0 input either way.
 
-### Per-project install — any agent (also Cursor, Cline, Aider, local LLMs)
+### Agents without a skill system (Cursor, Cline, Aider, local LLMs)
 
 ```sh
-./rwang-init.sh /path/to/your/project        # macOS / Linux / Git Bash
-.\rwang-init.ps1 C:\path\to\your\project      # Windows
+~/.rwang/rwang-init.sh /path/to/your/project          # macOS / Linux / Git Bash
+powershell -File $HOME\.rwang\rwang-init.ps1 C:\path\to\project   # Windows
 ```
 
-This copies into your project: the five module files, `AGENTS.md` (the command dispatch table — auto-read by Codex/Antigravity/Cursor), `CLAUDE.md`, **`.agents/skills/`** (workspace skills — Codex and Antigravity pick these up with zero machine setup), and the pre-commit write gate if the project is a git repo. Then just tell your agent **`RWANG:MasterPlan`**.
+This copies into the project: the five module files, `AGENTS.md` (the command dispatch table those agents auto-read), `CLAUDE.md`, workspace `.agents/skills/`, and the pre-commit write gate if the project is a git repo.
 
-No script? Copy these into your project root by hand and tell the agent to read `AGENTS.md`:
-
-```
-RWANG-MASTERPLAN.md  RWANG-CORE.md  RWANG-REVIEW.md  RWANG-OPTIMIZE.md  RWANG-VERSION.md
-AGENTS.md   (from templates/)
-```
+No script? Copy `RWANG-*.md` + `templates/AGENTS.md` into the project root by hand and tell the agent to read `AGENTS.md`.
 
 ## How it works
 
@@ -81,7 +73,8 @@ your-project/
 ├─ AGENTS.md                    ← command dispatch table (Codex/Cursor/others auto-load this)
 ├─ CLAUDE.md                    ← same dispatch for Claude Code
 ├─ README.md                    ← reserved for humans (never touched)
-├─ project/                     ← YOUR input: specs, ideas, notes (read-only for agents)
+├─ <your spec files>            ← YOUR input lives at the root (read-only for agents)
+├─ project/                     ← optional tidiness folder for many input files
 ├─ docs/                        ← generated deliverables (Markdown, for humans)
 ├─ state/PROJECT_STATE.json     ← phase position (how sessions resume)
 ├─ state/*.jsonl                ← append-only runtime history
@@ -123,8 +116,8 @@ Full rules are in [RWANG-MASTERPLAN.md](./RWANG-MASTERPLAN.md) — it is self-co
 
 **RWANG:MasterPlan** คือโปรโตคอลสากลแบบวางไฟล์เดียวใช้ได้ทุกโปรเจกต์: บอก agent ว่า "อ่าน MasterPlan" แล้วมันจะสำรวจ repo หาสเปกของคุณใน `project/` เช็คสถานะจาก `state/PROJECT_STATE.json` แล้วทำงานต่อจากจุดเดิมเองทันที — ออกแบบสถาปัตยกรรมครบ 7 phase ก่อนเขียนโค้ด หยุดรอคุณอนุมัติทุกด่าน (พิมพ์ "อนุมัติ" เพื่อไปต่อ) และแตกงานเป็น task ให้ agent หลายตัว (รวมถึง local LLM) ทำขนานกันได้โดยไม่ตีกัน
 
-**ติดตั้งครั้งเดียวใช้สามค่าย:** รัน `install.ps1` (Windows) หรือ `install.sh` — ลง skill ให้ **Claude Code** (`RWANG:MasterPlan`), **Codex CLI** (`$rwang-masterplan`), **Antigravity CLI** (`/skills`) พร้อมกัน
-**ติดตั้งรายโปรเจกต์ / agent อื่น (Cursor, Cline, Aider, local LLM):** รัน `rwang-init.ps1 C:\path\to\project` (หรือ `rwang-init.sh`) — วางไฟล์โมดูล + `AGENTS.md` (ตารางคำสั่ง) + `.agents/skills/` (workspace skills ที่ Codex/Antigravity เห็นเองโดยไม่ต้องตั้งค่าเครื่อง)
+**ติดตั้งคำสั่งเดียวจบ ใช้ได้สามค่าย:** `iwr -useb https://raw.githubusercontent.com/Freshair129/RWANG-PROMAX/main/install.ps1 | iex` (Windows) หรือ `curl -fsSL .../install.sh | sh` — toolkit ลงที่ `~/.rwang` และ skill ถูกลงทะเบียนให้ **Claude Code**, **Codex CLI** (`$rwang-masterplan`), **Antigravity CLI** (`/skills`) พร้อมกัน — **ไม่มี step 2**: เปิดโปรเจกต์ไหนก็ได้แล้วเรียก skill มันจะติดตั้ง RWANG ลงโปรเจกต์นั้นเอง ไฟล์สเปกวางที่ root ได้เลย (`project/` เป็นแค่ตัวเลือกจัดระเบียบ)
+**Agent ที่ไม่มีระบบ skill (Cursor, Cline, Aider, local LLM):** รัน `~/.rwang/rwang-init.ps1 C:\path\to\project` — วางไฟล์โมดูล + `AGENTS.md` (ตารางคำสั่ง) ลงโปรเจกต์
 
 โมดูลเสริม (ติดตั้งมาพร้อมกัน): `RWANG:Core` กฎพฤติกรรม 6 ข้อที่บังคับใช้ตลอดเวลา — แถลง assumption ก่อนทำ, เรียบง่าย, แก้เท่าที่ขอ, จัดระดับงาน C-1/2/3 (งานเบาลุยได้เลย doc-first เฉพาะ C-2 ขึ้นไป), หา root cause ก่อนแก้บั๊ก, verify ก่อนประกาศเสร็จ, `RWANG:Review` รีวิวโค้ดหลายมิติแบบรายงานอย่างเดียวไม่แก้เอง, `RWANG:Optimize` ปรับ performance แบบวัดผลก่อน-หลัง อะไรที่วัดแล้วไม่ดีขึ้นจะ revert ทิ้ง — ทั้งคู่เคารพกฎ RWANG: ห้ามแตะสถาปัตยกรรมและ public API — และ `RWANG:Version` ระบบ version x.y.z ของทุกเอกสาร/โค้ดแบบ**ไม่แตะไฟล์ต้นฉบับ** — metadata + changelog อยู่ใน sidecar `.rwang/` ที่ mirror ชื่อไฟล์เดิม, audit จับ drift ด้วย sha256 (แก้ไฟล์แต่ไม่ bump = โดนจับ), มี git pre-commit **write gate** ปฏิเสธ commit ที่แก้ไฟล์ลงทะเบียนโดยไม่ผ่าน bump: เอกสาร draft = 0.x, phase อนุมัติแล้ว = 1.0.0 (frozen), จะ bump MAJOR หลัง freeze ต้องมี change request ก่อน
 

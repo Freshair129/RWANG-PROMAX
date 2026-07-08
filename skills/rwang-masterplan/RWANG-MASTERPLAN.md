@@ -18,7 +18,7 @@ Upon reading this file, an agent MUST perform these steps in order, without wait
 **Step 1 — Inventory the repository.**
 Look for, in this order:
 1. `state/PROJECT_STATE.json` — the current phase and status (see §3)
-2. `project/` — project definition materials supplied by the owner (specs, ideas, notes, requirements, existing code descriptions). Files at the repo root that are not this file, not agent pointer files (`CLAUDE.md`, `AGENTS.md`), and not generated deliverables also count as project materials (including `README.md` if the owner wrote one).
+2. Owner's project materials — spec/idea/notes files **at the repo root** (anything that is not a RWANG module file, not an agent pointer file (`CLAUDE.md`, `AGENTS.md`), and not a generated deliverable — including `README.md` if the owner wrote one), plus the **optional** `project/` folder if the owner created one. `project/` is a tidiness convention for projects with many input files — it is never required.
 3. `docs/` — deliverables generated in previous sessions
 4. `queue/`, `state/*.jsonl` — machine and runtime layers (see §8)
 
@@ -44,13 +44,14 @@ Look for, in this order:
 
 ## 2. Repository Layout
 
-Agents MUST create and maintain this structure. Owner-supplied materials in `project/` are read-only for agents.
+Agents MUST create and maintain this structure. Owner-supplied materials (root spec files or `project/`) are read-only for agents.
 
 ```
 RWANG-MASTERPLAN.md            ← the RWANG MasterPlan (never modified by agents)
 CLAUDE.md / AGENTS.md          ← one-line pointers to this file (auto-loaded by agents)
 README.md                      ← human-facing project readme (Phase 0 output or owner-written)
-project/                       ← owner's input materials (agents never modify)
+<owner's spec files>           ← project materials live at the root — or in optional project/
+project/                       ← OPTIONAL: tidiness folder for many input files (agents never modify)
 docs/                          ← Layer 1: human-readable deliverables (§9)
 state/PROJECT_STATE.json       ← phase state (§3)
 state/progress.jsonl           ← Layer 3: task state transitions (append-only)

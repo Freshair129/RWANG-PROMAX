@@ -1,10 +1,31 @@
 #!/usr/bin/env sh
-# Install the RWANG: skill family into every agent harness on this machine.
-# Targets: Claude Code (~/.claude/skills), Codex CLI (~/.agents/skills),
-#          Antigravity CLI (~/.gemini/antigravity-cli/skills — only if ~/.gemini exists)
+# RWANG one-command installer (macOS / Linux / Git Bash)
+# Usage (one line, no clone needed):
+#   curl -fsSL https://raw.githubusercontent.com/Freshair129/RWANG-PROMAX/main/install.sh | sh
+# Or from a local clone:  ./install.sh
+#
+# 1. Puts the toolkit at ~/.rwang (RWANG's global home — like ~/.claude)
+# 2. Registers the skill family for Claude Code, Codex CLI, and Antigravity CLI.
+# No per-project step: the skill sets a project up by itself on first use.
 set -e
-src="$(cd "$(dirname "$0")" && pwd)/skills"
+RWANG_HOME="$HOME/.rwang"
+script_dir="$(cd "$(dirname "$0")" 2>/dev/null && pwd || true)"
 
+if [ ! -d "$RWANG_HOME/skills" ]; then
+  if [ -n "$script_dir" ] && [ -d "$script_dir/skills" ]; then
+    mkdir -p "$RWANG_HOME"
+    cp -R "$script_dir"/. "$RWANG_HOME"/
+    rm -rf "$RWANG_HOME/.git"
+  else
+    git clone --depth 1 https://github.com/Freshair129/RWANG-PROMAX.git "$RWANG_HOME" \
+      || { echo "clone failed - install git or clone manually"; exit 1; }
+  fi
+else
+  git -C "$RWANG_HOME" pull -q 2>/dev/null || true
+fi
+echo "toolkit home -> $RWANG_HOME"
+
+src="$RWANG_HOME/skills"
 install_to() {
   dest="$1"; label="$2"
   mkdir -p "$dest"
@@ -25,5 +46,5 @@ else
 fi
 
 echo ""
-echo "Invoke:  Claude Code: RWANG:MasterPlan   Codex: \$rwang-masterplan   Antigravity: /skills"
-echo "Restart the CLI if a skill does not appear."
+echo "Done. Open any project and type:  RWANG:MasterPlan   (Codex: \$rwang-masterplan, Antigravity: /skills)"
+echo "The skill installs RWANG into that project by itself on first run."
