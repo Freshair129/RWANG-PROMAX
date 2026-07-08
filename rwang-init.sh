@@ -13,6 +13,14 @@ for pointer in AGENTS.md CLAUDE.md; do
   if [ -f "$target/$pointer" ]; then echo "keep   $pointer (already present)"; else cp "$here/templates/$pointer" "$target/$pointer"; echo "add    $pointer"; fi
 done
 
+# workspace skills for Codex CLI / Antigravity CLI (.agents/skills is the cross-tool standard)
+for skill in "$here/skills"/*/; do
+  name="$(basename "$skill")"
+  mkdir -p "$target/.agents/skills/$name"
+  cp -f "$skill"* "$target/.agents/skills/$name/"
+done
+echo "add    .agents/skills/ (workspace skills — Codex & Antigravity pick these up)"
+
 # install the RWANG write gate (pre-commit hook) if the target is a git repo
 if [ -d "$target/.git" ]; then
   if [ -f "$target/.git/hooks/pre-commit" ]; then

@@ -15,6 +15,15 @@ foreach ($p in @("AGENTS.md","CLAUDE.md")) {
     else { Copy-Item (Join-Path $here "templates\$p") $dst; Write-Host "add    $p" }
 }
 
+# workspace skills for Codex CLI / Antigravity CLI (.agents/skills is the cross-tool standard)
+$wsSkills = Join-Path $Target ".agents\skills"
+Get-ChildItem -Path (Join-Path $here "skills") -Directory | ForEach-Object {
+    $t = Join-Path $wsSkills $_.Name
+    New-Item -ItemType Directory -Force -Path $t | Out-Null
+    Copy-Item -Path (Join-Path $_.FullName "*") -Destination $t -Force
+}
+Write-Host "add    .agents/skills/ (workspace skills - Codex & Antigravity pick these up)"
+
 # install the RWANG write gate (pre-commit hook) if the target is a git repo
 $gitDir = Join-Path $Target ".git"
 if (Test-Path $gitDir) {
