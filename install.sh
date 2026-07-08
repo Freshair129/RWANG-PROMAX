@@ -1,12 +1,12 @@
 #!/usr/bin/env sh
-# RWANG one-command installer (macOS / Linux / Git Bash)
-# Usage (one line, no clone needed):
-#   curl -fsSL https://raw.githubusercontent.com/Freshair129/RWANG-PROMAX/main/install.sh | sh
-# Or from a local clone:  ./install.sh
+# RWANG one-command installer (macOS / Linux)
+# Usage:  curl -fsSL https://raw.githubusercontent.com/Freshair129/RWANG-PROMAX/main/install.sh | sh
+#         (or from a local clone: ./install.sh)   Windows: use install.ps1
 #
-# 1. Puts the toolkit at ~/.rwang (RWANG's global home — like ~/.claude)
-# 2. Registers the skill family for Claude Code, Codex CLI, and Antigravity CLI.
-# No per-project step: the skill sets a project up by itself on first use.
+# Design: SINGLE SOURCE OF TRUTH.
+#   1. Toolkit lands at ~/.rwang
+#   2. Skills are copied ONCE into ~/.agents/skills (cross-tool standard = SSOT; Codex reads it natively)
+#   3. Claude Code and Antigravity get symlinks pointing at the SSOT.
 set -e
 RWANG_HOME="$HOME/.rwang"
 script_dir="$(cd "$(dirname "$0")" 2>/dev/null && pwd || true)"
@@ -26,25 +26,33 @@ fi
 echo "toolkit home -> $RWANG_HOME"
 
 src="$RWANG_HOME/skills"
-install_to() {
+ssot="$HOME/.agents/skills"
+mkdir -p "$ssot"
+for skill in "$src"/*/; do
+  name="$(basename "$skill")"
+  mkdir -p "$ssot/$name"
+  cp -Rf "$skill". "$ssot/$name"/
+done
+echo "SSOT      -> $ssot  (Codex reads this natively)"
+
+link_harness() {
   dest="$1"; label="$2"
   mkdir -p "$dest"
   for skill in "$src"/*/; do
     name="$(basename "$skill")"
-    mkdir -p "$dest/$name"
-    cp -f "$skill"* "$dest/$name/"
+    rm -rf "$dest/$name"
+    ln -sfn "$ssot/$name" "$dest/$name"
   done
-  echo "installed -> $label  ($dest)"
+  echo "linked    -> $label  ($dest -> SSOT)"
 }
 
-install_to "$HOME/.claude/skills" "Claude Code"
-install_to "$HOME/.agents/skills" "Codex CLI (agents standard)"
+link_harness "$HOME/.claude/skills" "Claude Code"
 if [ -d "$HOME/.gemini" ]; then
-  install_to "$HOME/.gemini/antigravity-cli/skills" "Antigravity CLI"
+  link_harness "$HOME/.gemini/antigravity-cli/skills" "Antigravity CLI"
 else
   echo "skip      Antigravity CLI (no ~/.gemini on this machine)"
 fi
 
 echo ""
-echo "Done. Open any project and type:  RWANG:MasterPlan   (Codex: \$rwang-masterplan, Antigravity: /skills)"
-echo "The skill installs RWANG into that project by itself on first run."
+echo "Done. Open any project and type:  RWANG:QuickStart"
+echo "(Claude: /rwang-quickstart, Codex: \$rwang-quickstart, Antigravity: /skills)"

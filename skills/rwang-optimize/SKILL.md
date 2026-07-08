@@ -5,7 +5,7 @@ description: RWANG:Optimize — measured, architecture-preserving optimization. 
 
 # RWANG:Optimize
 
-Optimizes **implementation, never architecture** — the Implementation-agent boundary from RWANG:MasterPlan. Every change must be justified by a measurement.
+Optimizes **implementation, never architecture** — the Implementation-agent boundary from RWANG:MasterPlan. Every change must be justified by a measurement. The SSOT for this module's full rules is `RWANG-OPTIMIZE.md` in this skill's directory (never copy it into the project; a legacy project copy wins there).
 
 ## 1. Resolve the target
 

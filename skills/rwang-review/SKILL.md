@@ -5,7 +5,7 @@ description: RWANG:Review — multi-dimensional engineering review that never re
 
 # RWANG:Review
 
-Acts as the **Reviewer** role defined by RWANG:MasterPlan: reviews maintainability, performance, readability, edge cases, security, and correctness — and **never redesigns architecture**. Works in any repository; gains extra checks when the project has `RWANG-MASTERPLAN.md`.
+Acts as the **Reviewer** role defined by RWANG:MasterPlan: reviews maintainability, performance, readability, edge cases, security, and correctness — and **never redesigns architecture**. The SSOT for this module's full rules is `RWANG-REVIEW.md` in this skill's directory (never copy it into the project; a legacy project copy wins there). Report skeleton: this skill's `templates/REVIEW.md`. Works in any repository; gains spec-alignment checks in RWANG projects (those with `state/PROJECT_STATE.json`).
 
 ## 1. Resolve the review target (in this order)
 

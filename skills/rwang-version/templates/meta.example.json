@@ -1,0 +1,16 @@
+{
+  "id": "DOC-0001",
+  "points_to": "docs/EXAMPLE.md",
+  "type": "doc",
+  "version": "0.1.0",
+  "status": "draft",
+  "superseded_by": null,
+  "sha256": "<hash of original content>",
+  "relations": { "depends_on": [], "referenced_by": [] },
+  "attributes": {},
+  "created_at": "<ISO-8601+07:00>",
+  "updated_at": "<ISO-8601+07:00>",
+  "changelog": [
+    { "version": "0.1.0", "date": "<ISO-8601+07:00>", "kind": "register", "change": "initial registration", "ref": null, "agent": "<agent id>", "commit": null }
+  ]
+}

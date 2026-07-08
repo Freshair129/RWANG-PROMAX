@@ -46,9 +46,9 @@ Look for, in this order:
 
 Agents MUST create and maintain this structure. Owner-supplied materials (root spec files or `project/`) are read-only for agents.
 
+> With installed skills the project stays **clean** — this module lives in the skill (SSOT `~/.agents/skills`), not in the project. The `RWANG-*.md` / `AGENTS.md` lines below exist only in skill-less installs (via `rwang-init`); if a project carries its own copies, those win for that project.
+
 ```
-RWANG-MASTERPLAN.md            ← the RWANG MasterPlan (never modified by agents)
-CLAUDE.md / AGENTS.md          ← one-line pointers to this file (auto-loaded by agents)
 README.md                      ← human-facing project readme (Phase 0 output or owner-written)
 <owner's spec files>           ← project materials live at the root — or in optional project/
 project/                       ← OPTIONAL: tidiness folder for many input files (agents never modify)
