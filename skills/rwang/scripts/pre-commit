@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# RWANG governed-artifact write gate. Bash is required for NUL-safe path handling.
+set -u
+if [ ! -d .rwang/meta ] &&
+   ! git cat-file -e "HEAD:.rwang/meta" 2>/dev/null &&
+   ! git cat-file -e ":.rwang/meta" 2>/dev/null; then
+  exit 0
+fi
+
+hash_stdin() {
+  if command -v sha256sum >/dev/null 2>&1; then sha256sum | cut -d' ' -f1
+  else shasum -a 256 | cut -d' ' -f1
+  fi
+}
+
+staged=()
+while IFS= read -r -d '' path; do
+  staged[${#staged[@]}]="$path"
+done < <(git diff --cached --name-only --diff-filter=ACMRD -z)
+[ ${#staged[@]} -gt 0 ] || exit 0
+fail=0
+
+is_staged() {
+  local wanted="$1" path
+  for path in "${staged[@]}"; do [ "$path" = "$wanted" ] && return 0; done
+  return 1
+}
+
+for f in "${staged[@]}"; do
+  case "$f" in .rwang/*) continue ;; esac
+  meta=".rwang/meta/$f.json"
+  if ! git cat-file -e "HEAD:$meta" 2>/dev/null &&
+     ! git cat-file -e ":$meta" 2>/dev/null &&
+     [ ! -f "$meta" ]; then
+    continue
+  fi
+
+  if ! git cat-file -e ":$f" 2>/dev/null; then
+    echo "RWANG gate: deletion of governed artifact '$f' requires an explicit deprecate/supersede workflow." >&2
+    fail=1
+    continue
+  fi
+  if ! is_staged "$meta"; then
+    echo "RWANG gate: governed artifact '$f' requires its sidecar in this commit." >&2
+    fail=1
+    continue
+  fi
+
+  want=$(git show ":$f" | hash_stdin)
+  if ! git show ":$meta" | grep -Eq '"sha256"[[:space:]]*:[[:space:]]*"'"$want"'"'; then
+    echo "RWANG gate: current sha256 field for '$f' does not match staged content." >&2
+    fail=1
+  fi
+done
+
+[ "$fail" -eq 0 ] || echo "Run RWANG:version bump; do not bypass with --no-verify." >&2
+exit "$fail"

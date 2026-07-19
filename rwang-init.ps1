@@ -1,43 +1,54 @@
-# Install RWANG into a project so ANY agent (Codex, Cursor, Claude, local LLM) can use it.
-# Usage: .\rwang-init.ps1 C:\path\to\your\project   (defaults to current directory)
+# Link a project to globally installed RWANG skills without copying module payloads.
+# Usage: .\rwang-init.ps1 C:\path\to\project
 param([string]$Target = ".")
 $here = $PSScriptRoot
-New-Item -ItemType Directory -Force -Path $Target | Out-Null
+$targetPath = [IO.Path]::GetFullPath($Target)
+New-Item -ItemType Directory -Force -Path $targetPath | Out-Null
 
-foreach ($f in @("RWANG-MASTERPLAN.md","RWANG-CORE.md","RWANG-REVIEW.md","RWANG-OPTIMIZE.md","RWANG-VERSION.md")) {
-    $dst = Join-Path $Target $f
-    if (Test-Path $dst) { Write-Host "keep   $f (already present)" }
-    else { Copy-Item (Join-Path $here $f) $dst; Write-Host "add    $f" }
-}
-foreach ($p in @("AGENTS.md","CLAUDE.md")) {
-    $dst = Join-Path $Target $p
-    if (Test-Path $dst) { Write-Host "keep   $p (already present)" }
-    else { Copy-Item (Join-Path $here "templates\$p") $dst; Write-Host "add    $p" }
+foreach ($pointer in @("AGENTS.md","CLAUDE.md")) {
+    $destination = Join-Path $targetPath $pointer
+    if (Test-Path -LiteralPath $destination) { Write-Host "keep   $pointer (already present)" }
+    else { Copy-Item -LiteralPath (Join-Path $here "templates\$pointer") -Destination $destination; Write-Host "add    $pointer" }
 }
 
-# workspace skills for Codex CLI / Antigravity CLI (.agents/skills is the cross-tool standard)
-$wsSkills = Join-Path $Target ".agents\skills"
-Get-ChildItem -Path (Join-Path $here "skills") -Directory | ForEach-Object {
-    $t = Join-Path $wsSkills $_.Name
-    New-Item -ItemType Directory -Force -Path $t | Out-Null
-    Copy-Item -Path (Join-Path $_.FullName "*") -Destination $t -Force
+$workspaceSkills = Join-Path $targetPath ".agents\skills"
+$globalSkills = Join-Path $HOME ".agents\skills"
+New-Item -ItemType Directory -Force -Path $workspaceSkills | Out-Null
+foreach ($name in @("rwang", "rwang-review", "rwang-optimize")) {
+    $sourceSkill = Join-Path $globalSkills $name
+    if (-not (Test-Path -LiteralPath (Join-Path $sourceSkill "SKILL.md"))) {
+        throw "Missing globally installed skill: $sourceSkill. Run install.ps1 first."
+    }
+    $link = Join-Path $workspaceSkills $name
+    if (Test-Path -LiteralPath $link) {
+        $item = Get-Item -LiteralPath $link -Force
+        if (-not $item.LinkType) { throw "Refusing to overwrite project-local skill copy: $link" }
+        $currentTarget = [IO.Path]::GetFullPath([string]@($item.Target)[0])
+        if ($currentTarget -eq [IO.Path]::GetFullPath($sourceSkill)) {
+            Write-Host "keep   .agents/skills/$name (correct link already present)"
+            continue
+        }
+        cmd /c rmdir "$link" | Out-Null
+        Write-Host "replace .agents/skills/$name (stale link target: $currentTarget)"
+    }
+    New-Item -ItemType Junction -Path $link -Target $sourceSkill | Out-Null
+    Write-Host "link   .agents/skills/$name -> $sourceSkill"
 }
-Write-Host "add    .agents/skills/ (workspace skills - Codex & Antigravity pick these up)"
 
-# install the RWANG write gate (pre-commit hook) if the target is a git repo
-$gitDir = Join-Path $Target ".git"
-if (Test-Path $gitDir) {
+$gitDir = Join-Path $targetPath ".git"
+if (Test-Path -LiteralPath $gitDir) {
     $hook = Join-Path $gitDir "hooks\pre-commit"
-    if (Test-Path $hook) { Write-Host "keep   .git/hooks/pre-commit (already exists - merge gate/pre-commit manually)" }
+    if (Test-Path -LiteralPath $hook) { Write-Host "keep   .git/hooks/pre-commit (merge the RWANG gate manually if needed)" }
     else {
-        New-Item -ItemType Directory -Force -Path (Join-Path $gitDir "hooks") | Out-Null
-        Copy-Item (Join-Path $here "gate\pre-commit") $hook
-        Write-Host "add    .git/hooks/pre-commit (RWANG write gate)"
+        $hookSource = Join-Path $globalSkills "rwang\scripts\pre-commit"
+        if (-not (Test-Path -LiteralPath $hookSource -PathType Leaf)) { throw "Missing pre-commit source: $hookSource" }
+        New-Item -ItemType Directory -Force -Path (Split-Path -Parent $hook) | Out-Null
+        Copy-Item -LiteralPath $hookSource -Destination $hook
+        Write-Host "add    .git/hooks/pre-commit (governed-artifact gate)"
     }
 } else {
-    Write-Host "note   not a git repo - write gate not installed (run 'git init' then re-run to enable it)"
+    Write-Host "note   not a git repo; write gate not installed"
 }
 
-Write-Host ""
-Write-Host "RWANG installed into: $Target"
-Write-Host "Put your project spec/notes in $Target\project\ then tell your agent: RWANG:MasterPlan"
+Write-Host "RWANG linked into: $targetPath"
+Write-Host "Put project materials at the root or in project/, then invoke RWANG:init"
