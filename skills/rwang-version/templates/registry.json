@@ -1,6 +1,0 @@
-{
-  "registry_version": "1.0.0",
-  "items": [
-    { "id": "DOC-0001", "path": "<relative path>", "version": "0.1.0", "status": "draft" }
-  ]
-}

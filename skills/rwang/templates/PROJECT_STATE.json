@@ -1,0 +1,16 @@
+{
+  "project": "<project name>",
+  "repository_kind": "greenfield | brownfield",
+  "current_design_gate": "DG0",
+  "gate_status": "not_started",
+  "master_plan_status": "not_started",
+  "approved_design_gates": [],
+  "scan_evidence": {
+    "profile": "L0 | L1 | L2",
+    "snapshot_path": ".rwang/evidence/codebase-snapshot.json",
+    "snapshot_sha256": "<sha256>",
+    "git_head": "<commit or null>",
+    "completed_at": "<ISO-8601+07:00>"
+  },
+  "updated_at": "<ISO-8601+07:00>"
+}

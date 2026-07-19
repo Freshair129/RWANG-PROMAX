@@ -1,36 +1,26 @@
-# RWANG — Agent Working Agreement
+# RWANG Agent Working Agreement
 
-This project uses the **RWANG:** protocol family. It is tool-neutral — these instructions apply to any agent that reads this file (Codex, Cursor, Cline, Aider, local LLMs, etc.).
+This project uses three RWANG skills under `.agents/skills/`:
 
-## Always in effect
+- `rwang` - init, scan, plan, continue, status, and version governance
+- `rwang-review` - read-only engineering review
+- `rwang-optimize` - measured implementation optimization
 
-If `RWANG-CORE.md` exists at the project root, its rules **R1–R6 apply to every task at all times** — read it before doing anything else.
+Read `.agents/skills/rwang/SKILL.md` and its required references before any RWANG planning action. The human owner is the only approval authority. New planned feature/architecture code begins only after DG0-DG6 are approved; narrowly bounded LOW-risk C-1 maintenance on an existing brownfield codebase follows the exception in `references/CORE.md`. Existing `docs/PHASE_<N>_REVIEW.md` files are migration history and must be preserved.
 
-## On session start
+## Command routing
 
-Read `RWANG-MASTERPLAN.md` and execute its **Bootstrap Protocol** immediately (inventory the repo, resolve the current phase from `state/PROJECT_STATE.json`, and continue or start work). No other prompt is required.
+| User says | Route |
+|---|---|
+| `RWANG:init` | `.agents/skills/rwang/SKILL.md` -> init |
+| `RWANG:scan [--deep]` | `.agents/skills/rwang/SKILL.md` -> scan |
+| `RWANG:plan` | `.agents/skills/rwang/SKILL.md` -> plan |
+| `RWANG:continue` | `.agents/skills/rwang/SKILL.md` -> continue |
+| `RWANG:status` | `.agents/skills/rwang/SKILL.md` -> status |
+| `RWANG:version ...` | `.agents/skills/rwang/SKILL.md` -> version |
+| `RWANG:Review` | `.agents/skills/rwang-review/SKILL.md` |
+| `RWANG:Optimize` | `.agents/skills/rwang-optimize/SKILL.md` |
 
-## Command dispatch
+Plain-text legacy commands `RWANG:QuickStart`, `RWANG:MasterPlan`, `RWANG:Core`, and `RWANG:Version` route through `rwang` and emit a deprecation note. Explicit retired selectors such as `$rwang-quickstart` cannot resolve in 2.0; use `$rwang` with the canonical command.
 
-When the user invokes a RWANG command, open the matching file at the project root and follow it exactly:
-
-| User says | Read this file | What it does |
-|---|---|---|
-| `RWANG:QuickStart` | `RWANG-CORE.md` → `RWANG-VERSION.md` → `RWANG-MASTERPLAN.md` (in order) | One-shot onboarding: load rules → init registry/gate → bootstrap to the first gate |
-| `RWANG:MasterPlan` | `RWANG-MASTERPLAN.md` | Bootstrap / continue the architecture-first project |
-| `RWANG:Core` | `RWANG-CORE.md` | (Re)load the standing rules R1–R6 — always in effect once present |
-| `RWANG:Review` | `RWANG-REVIEW.md` | Engineering review of a diff / task / wave / phase — report only |
-| `RWANG:Optimize` | `RWANG-OPTIMIZE.md` | Measured, architecture-preserving optimization |
-| `RWANG:Version` | `RWANG-VERSION.md` | Sidecar SemVer registry: register, bump, audit + commit write gate |
-
-The command may include a target or action after it (e.g. `RWANG:Review src/parser.ts`, `RWANG:Version bump docs/10_DATA_MODELS.md minor "add event schema"`) — pass it to the module.
-
-## Non-negotiable rules (from RWANG-MASTERPLAN.md)
-
-- The human owner is the **only** approval authority. Approved phases are frozen.
-- During design phases (0–6) agents do **not** write production code.
-- No agent renames public APIs, merges modules, changes protocols, or alters folder structure without an approved `ARCHITECTURE_CHANGE_REQUEST.md`.
-- `README.md` is reserved for humans — never overwrite it.
-- Never modify files registered in `.rwang/` without going through `RWANG:Version bump`; never bypass the pre-commit gate with `--no-verify`.
-
-If a RWANG module file referenced above is not present in this project, fetch it from https://github.com/Freshair129/RWANG-PROMAX or tell the owner it is missing.
+Never copy RWANG module payloads into the project root. Never overwrite an existing Git hook; merge the governed-artifact gate manually. Never use `--no-verify`.

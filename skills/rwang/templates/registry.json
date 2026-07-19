@@ -1,0 +1,17 @@
+{
+  "registry_version": "2.0.0",
+  "governed_scope": {
+    "include": [
+      "docs/specs/**",
+      "docs/adr/**",
+      "schemas/**",
+      "policies/**",
+      "docs/MASTER_PLAN.md"
+    ],
+    "exclude": [
+      "docs/archive/**",
+      "docs/generated/**"
+    ]
+  },
+  "items": []
+}
